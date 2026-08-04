@@ -26,4 +26,12 @@ if image1 and image2:
     temp2.write(image2.read())
     temp2.close()
 
-    st.success("Temporary files created successfully!")
+    st.write("Calling match_images...")
+
+    score = match_images(temp1.name, temp2.name)
+
+    st.success("match_images executed successfully!")
+
+    st.write("Similarity Score:", score)
+
+   
