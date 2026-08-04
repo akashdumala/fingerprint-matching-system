@@ -1,0 +1,31 @@
+
+==========================================
+FINGERPRINT MATCHING PROJECT REPORT
+==========================================
+
+Dataset
+-------
+FVC2002 DB1
+
+Feature Extraction
+------------------
+Gabor Texture Features
+
+Similarity Measure
+------------------
+Euclidean Distance
+
+Evaluation
+----------
+ROC Curve
+AUC Score Generated
+
+Outputs
+-------
+1. Matching Scores CSV
+2. ROC Curve PNG
+3. Report TXT
+
+Status
+------
+PROJECT EXECUTED SUCCESSFULLY
