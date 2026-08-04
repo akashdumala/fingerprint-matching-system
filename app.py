@@ -1,7 +1,10 @@
-import streamlit as st
+import os
 import tempfile
 
+import streamlit as st
+
 from matcher.matcher_engine import match_images
+
 
 st.set_page_config(
     page_title="Fingerprint Matching System",
@@ -9,14 +12,21 @@ st.set_page_config(
     layout="centered"
 )
 
-st.title("Fingerprint Matching System")
+st.title("🔍 Fingerprint Matching System")
 
-image1 = st.file_uploader("Upload Fingerprint 1", type=["tif"])
-image2 = st.file_uploader("Upload Fingerprint 2", type=["tif"])
+st.write("Upload two fingerprint images to compare them.")
 
-if image1 and image2:
+image1 = st.file_uploader(
+    "Upload Fingerprint 1",
+    type=["tif", "png", "jpg", "jpeg"]
+)
 
-    st.success("Files uploaded successfully!")
+image2 = st.file_uploader(
+    "Upload Fingerprint 2",
+    type=["tif", "png", "jpg", "jpeg"]
+)
+
+if image1 is not None and image2 is not None:
 
     temp1 = tempfile.NamedTemporaryFile(delete=False, suffix=".tif")
     temp1.write(image1.read())
@@ -26,12 +36,25 @@ if image1 and image2:
     temp2.write(image2.read())
     temp2.close()
 
-    st.write("Calling match_images...")
+    try:
+        score = match_images(temp1.name, temp2.name)
 
-    score = match_images(temp1.name, temp2.name)
+        st.success("Matching Completed")
 
-    st.success("match_images executed successfully!")
+        st.subheader("Similarity Score")
+        st.write(f"### {score:.4f}")
 
-    st.write("Similarity Score:", score)
+        if score >= 0.03:
+            st.success("✅ Fingerprints Match")
+        else:
+            st.error("❌ Fingerprints Do Not Match")
 
-   
+    except Exception as e:
+        st.error(f"Error: {e}")
+
+    finally:
+        if os.path.exists(temp1.name):
+            os.remove(temp1.name)
+
+        if os.path.exists(temp2.name):
+            os.remove(temp2.name)
